@@ -1,0 +1,17 @@
+/**
+* Загрузка изображений по ссылки
+**/
+
+// Должен быть включен в php.ini allow_url_fopen = 1
+// $url = 'https://images.ua.prom.st/537898286_karmannyj-mini-massazher.jpg';
+// $path = 'images/537898286_karmannyj-mini-massazher.jpg';
+// file_put_contents($path, file_get_contents($url));
+
+
+// $ch = curl_init('https://images.ua.prom.st/537898286_karmannyj-mini-massazher.jpg');
+// $fp = fopen('images/537898286_karmannyj-mini-massazher.jpg', 'wb');
+// curl_setopt($ch, CURLOPT_FILE, $fp);
+// curl_setopt($ch, CURLOPT_HEADER, 0);
+// curl_exec($ch);
+// curl_close($ch);
+// fclose($fp);
