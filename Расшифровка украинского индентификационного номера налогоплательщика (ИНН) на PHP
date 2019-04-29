@@ -1,0 +1,31 @@
+<?php
+
+function parse_inn($inn){
+    
+    //$id must contain 10 digits
+    if (empty($inn) || !preg_match('/^\d{10}$/',$inn)) return false;
+    
+    $months = array('января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря');
+
+    $result = array();
+    $result['inn'] = $inn;
+    $result['sex'] = (substr($inn, 8, 1) % 2) ? 'm' : 'f';       
+     
+    $split = str_split($inn);
+
+    $summ = $split[0]*(-1) + $split[1]*5 + $split[2]*7 + $split[3]*9 + $split[4]*4 + $split[5]*6 + $split[6]*10 + $split[7]*5 + $split[8]*7;
+    
+    $result['control'] = (int)($summ - (11 * (int)($summ/11)));       
+     
+    $result['status'] = ($result['control'] == (int)$split[9]) ? true : false;
+ 
+    $inn = substr($inn, 0, 5);
+    
+    $normal_date = date('d.m.Y', strtotime('01/01/1900 + ' . $inn . ' days - 1 days'));
+    
+    list($result['day'], $result['month'], $result['year']) = explode('.', $normal_date);
+    
+    $result['str_month'] = $months[$result['month'] - 1];
+    
+    return $result;
+}
