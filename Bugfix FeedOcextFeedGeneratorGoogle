@@ -1,0 +1,9 @@
+Плагин: FeedOcextFeedGeneratorGoogle
+
+Файл controller/extension/feed/ocext_feed_generator_google.php
+
+Перед строчкой if(isset($data['sale_price']) && $data['sale_price']){
+ 
+ Вставить: 
+ 
+ $data['price'] = number_format($this->currency->format($data['price'], $this->config->get('config_currency'), false));
