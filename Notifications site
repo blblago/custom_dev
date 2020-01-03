@@ -1,0 +1,85 @@
+
+        public function getWelcomeWindow(){
+            
+            if(function_exists('curl_version')){
+                
+                $language_code = $this->config->get( 'config_admin_language' );
+                $url = "https://api.e-distributer.com/v1/welcome/?license=".HTTP_SERVER."&version_opencart=".VERSION."&version_ocext=".$this->this_version."&extension=".$this->this_extension."&language_code=".$language_code;
+                $curl = curl_init($url);
+                $curloptions = array(
+                    CURLOPT_CUSTOMREQUEST  =>"GET",  
+                    CURLOPT_POST           =>FALSE,      
+                    CURLOPT_USERPWD     =>":",
+                    CURLOPT_RETURNTRANSFER => TRUE,  
+                    CURLOPT_HEADER         => FALSE,
+                );
+                curl_setopt_array($curl, $curloptions);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); 
+                $welcome = curl_exec($curl);
+                $errmsg  = curl_error($curl);
+                curl_close($curl);
+                if(!$errmsg){
+                    
+                    echo $welcome;
+                    
+                }
+                
+            }else{
+                
+                echo "РУС: Расширение php CURL выключено. Включите расширение, чтобы получать важную информацию об этом продукте<br>ENG: Extension php CURL off. Turn the extension to receive important information on this product<br>DE: Extension php CURL off. Turn the extension to receive important information on this product<br>FR: Extension cURL de PHP off. Tournez l'extension pour recevoir des informations importantes sur ce produit";
+                
+            }
+            
+            exit();
+            
+        }
+		
+		
+		
+        public function getNotifications() {
+		sleep(1);
+		$this->load->language($this->path_oc_version.'/abcxyzanalysis');
+		$response = $this->getNotificationsCurl();
+		$json = array();
+		if ($response===false) {
+			$json['message'] = '';
+			$json['error'] = $this->language->get( 'error_notifications' );
+		} else {
+			$json['message'] = $response;
+			$json['error'] = '';
+		}
+		//$this->response->setOutput(json_encode($json));
+	}
+        
+        protected function curl_get_contents($url) {
+            if(function_exists('curl_version')){
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+                $output = curl_exec($ch);
+                curl_close($ch);
+                return $output;
+            }else{
+                $output['ru'] = 'Проверка версии недоступна. Включите php расширение - CURL на Вашем хостинге';
+                $output['en'] = 'You can not check the version. Enable php extension - CURL on your hosting';
+                $language_code = $this->config->get( 'config_admin_language' );
+                if(isset($output[$language_code])){
+                    return $output[$language_code];
+                }else{
+                    return $output['en'];
+                }
+            }
+	}
+
+
+	public function getNotificationsCurl() {
+		$language_code = $this->config->get( 'config_admin_language' );
+		$result = $this->curl_get_contents("http://www.".$this->this_ocext_host.".com/index.php?route=information/check_update_version&license=".HTTP_SERVER."&version_opencart=".VERSION."&version_ocext=".$this->this_version."&extension=".$this->this_extension."&language_code=$language_code");
+		if (stripos($result,'<html') !== false) {
+			return '';
+		}
+		return $result;
+	}
+        
