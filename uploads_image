@@ -1,0 +1,10 @@
+			if($_FILES['image']['error'] === UPLOAD_ERR_OK) {
+
+				$uploadfile = $this->dirImg . basename($_FILES['image']['name']);
+
+				if(!is_dir($this->dirImg)) {
+					mkdir($this->dirImg, 0777, true);
+				}
+				
+				move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);
+			}
