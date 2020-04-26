@@ -1,0 +1,8 @@
+    <script>
+      if (window.location.hash.indexOf('#tab') == 0 && $("[href=" + window.location.hash + "]").length) {
+        $(".panel-body > .nav-tabs li").removeClass("active");
+        $("[href=" + window.location.hash + "]").parents('li').addClass("active");
+        $(".panel-body:first .tab-content:first .tab-pane:first").removeClass("active");
+        $(window.location.hash).addClass("active");
+      }
+    </script>
