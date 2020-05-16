@@ -1,0 +1,11 @@
+Почтовые логи доступны в файле:
+/var/log/exim4/mainlog
+
+Отключить ipv6 для почты можно добавив в файл:
+/etc/exim4/exim4.conf.template
+
+Директиву:
+disable_ipv6 = true
+
+И перезапустить exim командой:
+service exim restart
