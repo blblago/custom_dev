@@ -33,3 +33,6 @@ TRUNCATE oc_category_filter;
 DELETE FROM oc_url_alias WHERE querу LIKE 'category_id=%';
 
 TRUNCATe oc_coupon_category;
+
+
+TRUNCATE TABLE oc_manufacturer oc_manufacturer_to_store
