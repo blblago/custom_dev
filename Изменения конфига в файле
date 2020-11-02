@@ -1,0 +1,74 @@
+* Создать файл cms.php
+* Создать файл database.php 
+
+<?php
+
+//Устанавливаем кодировку и вывод всех ошибок
+header('Content-Type: text/html; charset=UTF-8');
+error_reporting(E_ALL);
+
+    /**
+     * $db['default']['dsn'] = '';
+     * $db['default']['hostname'] = '';
+     * $db['default']['username'] = '';
+     * $db['default']['password'] = '';
+     * $db['default']['database'] = '';
+     */
+
+    function writeDatabaseConfig($data) {
+
+        $configFile = 'database.php';
+
+        $configContent = file_get_contents($configFile);
+
+        $basePattern = "/db\['default'\]\['__KEY__'\] = '([a-zA-Z0-9\-\_]*)';/";
+        $baseReplacement = "db['default']['__KEY__'] = '__VALUE__';";
+
+        foreach ($data as $key => $value) {
+            $keyPattern = str_replace('__KEY__', $key, $basePattern);
+            $replacement = str_replace(['__KEY__', '__VALUE__'], [$key, $value], $baseReplacement);
+            $configContent = preg_replace($keyPattern, $replacement, $configContent);
+        }
+
+        if (!file_put_contents($configFile, $configContent)) {
+            die('Error writing file config.php for install');
+        }
+    }
+
+    writeDatabaseConfig(
+        [
+            'hostname' => '',
+            'username' => '',
+            'password' => '',
+            'database' => '',
+        ]
+    );
+    
+	exit;
+
+    function writeCmsConfig($data) {
+
+        $configFile = 'cms.php';
+
+        $configContent = file_get_contents($configFile);
+
+
+        $basePattern = "/config\[[\'\"]{1}__KEY__[\'\"]{1}\][\s]*=[\s]*([a-zA-Z0-9\-\_]*);/";
+        $baseReplacement = "config['__KEY__'] = __VALUE__;";
+
+        foreach ($data as $key => $value) {
+            $keyPattern = str_replace('__KEY__', $key, $basePattern);
+            $replacement = str_replace(['__KEY__', '__VALUE__'], [$key, $value], $baseReplacement);
+            $configContent = preg_replace($keyPattern, $replacement, $configContent);
+        }
+
+        if (!file_put_contents($configFile, $configContent)) {
+            die('Error writing file config.php for install');
+        }
+    }
+
+	writeCmsConfig(
+		['is_installed' => 'TRUE']
+	);
+
+    exit;
