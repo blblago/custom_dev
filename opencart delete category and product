@@ -16,8 +16,6 @@ TRUNCATE TABLE `oc_product_to_download`;
 TRUNCATE TABLE `oc_product_to_layout`;
 TRUNCATE TABLE `oc_product_to_store`;
 
-==============================================
-
 TRUNCATE oc_category;
 
 TRUNCATE oc_category_description;
@@ -35,4 +33,5 @@ DELETE FROM oc_url_alias WHERE querу LIKE 'category_id=%';
 TRUNCATe oc_coupon_category;
 
 
-TRUNCATE TABLE oc_manufacturer oc_manufacturer_to_store
+TRUNCATE TABLE oc_manufacturer;
+TRUNCATE TABLE oc_manufacturer_to_store
